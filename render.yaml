@@ -2,9 +2,9 @@ services:
   - type: web
     name: strategic-console
     env: python
-    buildCommand: "pip install ."
+    buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn wsgi:app"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.10.0
+        value: 3.13.4
     plan: free
