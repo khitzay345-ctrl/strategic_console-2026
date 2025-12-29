@@ -1,5 +1,6 @@
 # app.py
 from flask import Flask, render_template, abort, redirect, url_for, make_response
+
 import plotly.express as px
 import plotly
 import json
@@ -17,10 +18,13 @@ from services import google_sheets as gs
 
 import os
 BASE_DIR = Path(__file__).resolve().parent
+static_dir = BASE_DIR / 'static'
+static_dir.mkdir(exist_ok=True)
+
 app = Flask(__name__, 
             template_folder=str(BASE_DIR), 
-            static_folder=str(BASE_DIR),
-            static_url_path='')
+            static_folder=str(static_dir),
+            static_url_path='/static')
 
 # ===== HELPER FUNCTIONS (PLACE AT TOP) =====
 
@@ -130,17 +134,22 @@ def render_dashboard():
 
 @app.route("/")
 def index():
-    return app.send_static_file('index.html')
+    return redirect(url_for('ecom'))
+
+
+@app.route("/index.html")
+def index_html():
+    return redirect(url_for('ecom'))
 
 
 @app.route("/home")
 def home_page():
-    return render_dashboard()
+    return redirect(url_for('ecom'))
 
 
 @app.route("/dashboard")
 def dashboard():
-    return render_dashboard()
+    return redirect(url_for('ecom'))
 
 
 def build_ecom_target_context():
