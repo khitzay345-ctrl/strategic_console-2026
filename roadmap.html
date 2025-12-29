@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.road-stage {
+  background: #05080f;
+  color: #fff;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 30px 60px rgba(0,0,0,.55);
+  overflow: hidden;
+}
+
+.road-bg {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.road-bg img {
+  width: 100%;
+  object-fit: cover;
+  filter: saturate(1.2);
+}
+
+.glass-panel {
+  background: rgba(4, 9, 18, .72);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 24px;
+  margin-top: -60px;
+  position: relative;
+  backdrop-filter: blur(16px);
+}
+
+.quarter-card {
+  background: rgba(255,255,255,.04);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,.07);
+  transition: transform .2s ease;
+}
+
+.quarter-card:hover { transform: translateY(-6px); }
+
+.entry-table { width:100%; border-collapse:collapse; margin-top:12px; table-layout:fixed; }
+.entry-table col.col-activity { width: 20%; }
+.entry-table col.col-topic { width: 55%; }
+.entry-table col.col-owner { width: 25%; }
+.entry-table th, .entry-table td { padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.1); }
+.entry-table th { text-transform:uppercase; font-size:.75rem; letter-spacing:.6px; color:#9ab2d3; }
+.entry-table td { color:#e7efff; }
+.entry-table th:nth-child(3),
+.entry-table td:nth-child(3) { text-align:right; }
+.badge-owner { padding:4px 10px; border-radius:999px; background:rgba(255,255,255,.15); font-size:.8rem; }
+</style>
+
+<div class="road-stage">
+  <div class="road-bg">
+    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=60" alt="road background">
+  </div>
+  <div class="glass-panel">
+    <h1 style="font-weight:800; margin:0;">Roadmap Journey</h1>
+    <p style="opacity:.7; margin-top:6px;">Every quarter we shift lanes — hover to see owner responsibilities.</p>
+  </div>
+
+  <div class="mt-4">
+    {% for q in quarter_order %}
+    <div class="quarter-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0; font-weight:700; color:#f4f7ff;">{{ q }}</h3>
+        <span class="badge-owner">{{ quarters[q]|length }} initiatives</span>
+      </div>
+      <div class="table-responsive">
+        <table class="entry-table">
+          <colgroup>
+            <col class="col-activity" />
+            <col class="col-topic" />
+            <col class="col-owner" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Activity ID</th>
+              <th>Topic</th>
+              <th>Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in quarters[q] %}
+            <tr>
+              <td>{{ row.Activity_ID or '-' }}</td>
+              <td>{{ row.Topic or 'Unspecified topic' }}</td>
+              <td>{{ row.Owner or 'TBD' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

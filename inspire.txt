@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khit Zay Strategy Console</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --bg-dark: #060d1c;
+            --panel-dark: #0c152b;
+            --panel-mid: #111c38;
+            --primary: #5d6bff;
+            --teal: #2CCFBD;
+            --text-main: #f8fbff;
+            --text-muted: #9ca9c9;
+            --accent: #7c4dff;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: radial-gradient(circle at top, #132146, #060d1c 55%);
+            color: var(--text-main);
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .glass-panel {
+            background: rgba(12, 21, 43, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            border-color: rgba(93, 107, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .live-pill {
+            background: rgba(44, 207, 189, 0.1);
+            border: 1px solid rgba(44, 207, 189, 0.3);
+            color: var(--teal);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--teal);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--teal);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at top left, #0b63ff, #04204a 70%);
+            box-shadow: 0 24px 55px rgba(4, 32, 74, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pillar-tag {
+            background: rgba(124, 77, 255, 0.15);
+            color: #b394ff;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .container-custom {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Top Branding Bar -->
+    <header class="h-20 flex items-center justify-between px-8 bg-transparent container-custom">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <i class="bi bi-intersect text-white text-xl"></i>
+            </div>
+            <div>
+                <span class="text-2xl font-black tracking-tighter text-white">KHIT ZAY</span>
+                <p class="text-[10px] text-blue-400 font-bold uppercase tracking-[0.2em] leading-none">Strategy Console</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <div class="live-pill">
+                <span class="live-dot"></span>
+                Workbook Connected
+            </div>
+        </div>
+    </header>
+
+    <main class="container-custom px-6 py-8">
+        
+        <!-- Hero Section -->
+        <section class="hero-gradient rounded-[40px] p-12 lg:p-16 relative overflow-hidden mb-12">
+            <div class="relative z-10 max-w-3xl">
+                <span class="inline-block px-3 py-1 bg-white/10 backdrop-blur rounded text-blue-200 text-[10px] font-bold uppercase tracking-widest mb-6 border border-white/10">
+                    2026 Executive Overview
+                </span>
+                <h1 class="text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-6">
+                    Strategic Lane <br> <span class="text-blue-300">Shifting</span>
+                </h1>
+                <p class="text-blue-100/70 text-lg lg:text-xl mb-10 leading-relaxed max-w-xl">
+                    Unified performance intelligence for the 2026 business cycle. Access real-time E-commerce growth, strategic pillars, and roadmap transitions.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="/strategy_plan" class="bg-white text-blue-900 px-8 py-4 rounded-2xl font-bold hover:bg-blue-50 transition-all flex items-center gap-2">
+                        View Strategy Plan <i class="bi bi-chevron-right"></i>
+                    </a>
+                    <a href="/roadmap" class="bg-blue-600/30 backdrop-blur text-white border border-white/20 px-8 py-4 rounded-2xl font-bold hover:bg-blue-600/50 transition-all">
+                        Launch Roadmap
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Abstract background element -->
+            <div class="absolute right-[-10%] top-[-10%] w-[60%] h-[120%] opacity-20 pointer-events-none rotate-12">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1000&q=80" class="w-full h-full object-cover rounded-full filter blur-3xl">
+            </div>
+        </section>
+
+        <!-- Core Workstream Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            
+            <!-- E-commerce Card -->
+            <a href="/ecom" class="glass-panel p-2 group block">
+                <div class="h-48 rounded-[20px] overflow-hidden relative mb-6">
+                    <img src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0c152b] via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span class="bg-emerald-500 text-white text-[10px] font-black px-2 py-1 rounded">GROWTH</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-8">
+                    <h3 class="text-2xl font-bold text-white mb-2">E-commerce</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Performance comparison of 2024-2025 revenue metrics and 2026 monthly target projections.
+                    </p>
+                    <div class="flex items-center text-teal-400 font-bold text-sm">
+                        Analyze Targets <i class="bi bi-arrow-up-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Strategy Card -->
+            <a href="/strategy_plan" class="glass-panel p-2 group block">
+                <div class="h-48 rounded-[20px] overflow-hidden relative mb-6">
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0c152b] via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span class="bg-purple-600 text-white text-[10px] font-black px-2 py-1 rounded">EXECUTION</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-8">
+                    <h3 class="text-2xl font-bold text-white mb-2">Strategy Plan</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Quarterly pillars and phased action items documented with initiative-specific visualization.
+                    </p>
+                    <div class="flex items-center text-purple-400 font-bold text-sm">
+                        Explore Pillars <i class="bi bi-arrow-up-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Roadmap Card -->
+            <a href="/roadmap" class="glass-panel p-2 group block">
+                <div class="h-48 rounded-[20px] overflow-hidden relative mb-6">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0c152b] via-transparent to-transparent opacity-60"></div>
+                    <div class="absolute bottom-4 left-4">
+                        <span class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded">TIMELINE</span>
+                    </div>
+                </div>
+                <div class="px-6 pb-8">
+                    <h3 class="text-2xl font-bold text-white mb-2">Roadmap</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                        Quarterly initiative breakdown with owner assignments and status tracking across the roadmap.
+                    </p>
+                    <div class="flex items-center text-blue-400 font-bold text-sm">
+                        View Journey <i class="bi bi-arrow-up-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Footer Info -->
+        <footer class="border-t border-white/5 pt-12 pb-20 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-slate-500 text-sm">
+                © 2026 Khit Zay Strategy Group • Proprietary Executive Tool
+            </div>
+            <div class="flex gap-8">
+                <div class="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                    Ecom Module: Active
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                    Pillars: Loaded
+                </div>
+                <div class="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    Roadmap: Synced
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Simple Mobile Nav (Icons only) -->
+    <div class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#111c38]/80 backdrop-blur-xl border border-white/10 px-8 py-4 rounded-3xl flex gap-10 z-50 shadow-2xl">
+        <a href="/ecom" class="text-slate-400 hover:text-teal-400"><i class="bi bi-cart3 text-2xl"></i></a>
+        <a href="/strategy_plan" class="text-slate-400 hover:text-purple-400"><i class="bi bi-journal-text text-2xl"></i></a>
+        <a href="/roadmap" class="text-slate-400 hover:text-blue-400"><i class="bi bi-signpost-split text-2xl"></i></a>
+    </div>
+
+</body>
+</html>

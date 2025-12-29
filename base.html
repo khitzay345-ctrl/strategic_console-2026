@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ title or "Khit Zay Strategy Console" }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #060d1c;
+      --panel-dark: #0c152b;
+      --panel-mid: #111c38;
+      --primary: #5d6bff;
+      --teal: #2CCFBD;
+      --text-main: #f8fbff;
+      --text-muted: #9ca9c9;
+    } 
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #132146, #060d1c 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+      gap: 0;
+    }
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #0f1b3d, #080e1c 80%);
+      padding: 32px 24px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .brand {
+      font-size: 1.35rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .brand-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--teal));
+      display: grid; place-items: center;
+      font-size: 1.1rem;
+    }
+    .nav-group-title {
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.2rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .nav-pills { display:flex; flex-direction:column; gap:12px; }
+    .nav-pill {
+      padding: 10px 14px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all .2s ease;
+      border: 1px solid transparent;
+    }
+    .nav-pill i { font-size: 1rem; }
+    .nav-pill:hover {
+      color: var(--text-main);
+      border-color: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.05);
+    }
+    .nav-pill.active {
+      background: rgba(93,107,255,0.18);
+      color: white;
+      border-color: rgba(93,107,255,0.45);
+      box-shadow: 0 12px 24px rgba(14,20,51,0.45);
+    }
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .content-area {
+      flex: 1;
+      padding: 32px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 14px 20px;
+      backdrop-filter: blur(18px);
+    }
+    .live-pill { display:flex; align-items:center; gap:8px; font-size:0.9rem; color: var(--text-muted); }
+    .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #23ff98; box-shadow: 0 0 12px rgba(35,255,152,0.8); }
+
+    .page-hero {
+      background: linear-gradient(135deg, rgba(93,107,255,0.22), rgba(22,215,226,0.15));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 25px 55px rgba(4,6,15,0.55);
+    }
+    .page-hero .eyebrow { text-transform: uppercase; letter-spacing: 0.35rem; font-size: 0.75rem; color: rgba(255,255,255,0.65); margin-bottom: 10px; }
+    .page-hero h1 { margin: 0; font-size: clamp(2rem, 3vw, 2.9rem); font-weight: 700; }
+    .page-hero p { margin: 12px 0 0; color: rgba(255,255,255,0.82); max-width: 640px; }
+
+    main.page-body {
+      background: var(--panel-dark);
+      border-radius: 24px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: 0 30px 60px rgba(4,6,15,0.65);
+    }
+
+    footer { margin-top: auto; font-size: 0.85rem; color: rgba(255,255,255,0.45); text-align: center; padding: 8px 0 32px; }
+
+    .sidebar-toggle { display:none; border:none; background: rgba(255,255,255,0.08); color: white; padding: 8px 12px; border-radius: 10px; }
+
+    @media (max-width: 992px) {
+      .app-shell { flex-direction: column; }
+      .sidebar { width: 100%; position: relative; height: auto; }
+      .content-area { padding: 24px; }
+      .nav-pills { flex-direction: row; flex-wrap: wrap; }
+      .nav-pill { flex: 1 1 45%; }
+      .topbar { flex-wrap: wrap; gap: 12px; }
+      .sidebar-toggle { display: inline-flex; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon"><i class="bi bi-compass"></i></div>
+        <div>
+          Khit Zay
+          <div style="font-size:.75rem; color: var(--text-muted);">Strategy Console</div>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-title">Navigation</div>
+        <div class="nav-pills">
+          <a href="/" class="nav-pill {{ 'active' if request.path in ('/','/home','/dashboard') else '' }}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </a>
+          <a href="/ecom" class="nav-pill {{ 'active' if request.path == '/ecom' else '' }}">
+            <i class="bi bi-cart-check"></i> 2026 E-com Target
+          </a>
+          <a href="/ecom_comp" class="nav-pill {{ 'active' if request.path == '/ecom_comp' else '' }}">
+            <i class="bi bi-bar-chart"></i> E-com Comparison
+          </a>
+          <a href="/strategy_plan" class="nav-pill {{ 'active' if request.path == '/strategy_plan' else '' }}">
+            <i class="bi bi-easel3"></i> Strategy Plan
+          </a>
+          <a href="/roadmap" class="nav-pill {{ 'active' if request.path == '/roadmap' else '' }}">
+            <i class="bi bi-map"></i> Roadmap
+          </a>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        {{ now.strftime('%Y') if now is defined else '2026' }} © Khit Zay Strategy
+      </div>
+    </aside>
+
+    <div class="content-area">
+      <div class="topbar">
+        <button class="sidebar-toggle" type="button" onclick="document.getElementById('sidebar').classList.toggle('open');">
+          <i class="bi bi-list"></i>
+        </button>
+        <div class="live-pill">
+          <span class="live-dot"></span>
+          Live workbook data
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; color: var(--text-muted);">
+          <i class="bi bi-clock"></i>
+          <span>{{ generated_at.strftime('%Y-%m-%d %H:%M UTC') if generated_at is defined else '' }}</span>
+        </div>
+      </div>
+
+      {% set page_title = title or 'Strategy Dashboard' %}
+      {% set page_desc = description or 'Executive visibility across our strategic workstreams.' %}
+      <section class="page-hero">
+        <p class="eyebrow">Strategy Command Center</p>
+        <h1>{{ page_title }}</h1>
+        {% if page_desc %}<p>{{ page_desc }}</p>{% endif %}
+      </section>
+
+      <main class="page-body">
+        {% block content %}{% endblock %}
+      </main>
+
+      <footer>
+        Crafted for laser focus on 2026 objectives • {{ now.year if now is defined else '2025' }}
+      </footer>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

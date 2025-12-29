@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+.ecom-wrapper { max-width: 1200px; margin: 20px auto 28px; }
+.hero-card {
+  background: radial-gradient(circle at top left,#0b63ff,#04204a 70%);
+  color:#fff;
+  padding:22px 22px 18px;
+  border-radius:22px;
+  box-shadow:0 24px 55px rgba(4,32,74,.4);
+  margin-bottom:18px;
+}
+.hero-card h1 { margin:0; font-weight:800; letter-spacing:-0.05em; }
+.hero-card p { margin-top:6px;opacity:.88; }
+.hero-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem;}
+.hero-chip{padding:0.2rem 0.6rem;border-radius:999px;border:1px solid rgba(191,219,254,0.7);font-size:.72rem;color:#e5e7eb;background:rgba(15,23,42,0.18);}  
+.nav-tabs { border:none; margin-bottom:18px; }
+.nav-tabs .nav-link { border:none; border-radius:999px; padding:10px 20px; font-weight:600; color:#c8d4ff; background:rgba(255,255,255,0.06); }
+.nav-tabs .nav-link.active { background:#23d8bb; color:#041024; box-shadow:0 10px 20px rgba(35,216,187,.35); }
+.table-card { background:rgba(12,21,43,0.92); border-radius:24px; padding:22px; box-shadow:0 25px 55px rgba(4,6,15,.55); border:1px solid rgba(255,255,255,0.08); color:#f8fbff; }
+.e-table { width:100%; border-collapse:separate; border-spacing:0; color:#f4f7ff; }
+.e-table thead th { text-align:left; text-transform:uppercase; font-size:.75rem; letter-spacing:1px; padding:14px 12px; color:#d5ddff; border-bottom:2px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); }
+.e-table tbody td { padding:14px 12px; border-bottom:1px solid rgba(255,255,255,0.08); color:#fefefe; font-weight:500; }
+.e-table tbody tr:last-child td { border-bottom:none; }
+.e-table tbody tr:hover { background:rgba(255,255,255,0.06); }
+.e-table td.text-end { text-align:right; color:#fefefe; font-weight:700; }
+.stat-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap:18px; margin-bottom:20px; }
+.stat-card {
+  background:linear-gradient(135deg,#111b3d,#050811);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 18px 38px rgba(3,5,12,.7);
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  border:1px solid rgba(255,255,255,0.08);
+  color:#eaf1ff;
+}
+.stat-card span { text-transform:uppercase; font-size:.72rem; letter-spacing:.5px; color:#9fb4ff; }
+.stat-card strong { font-size:1.6rem; color:#fff; }
+.stat-card small { font-size:.8rem; color:#b5c2ff; }
+.delta-pill { padding:4px 10px; border-radius:999px; font-size:.75rem; background:rgba(35,216,187,.2); color:#23d8bb; }
+.bad { background:rgba(229,72,72,.2); color:#ffb3b3; }
+</style>
+
+<div class="ecom-wrapper">
+  <div class="hero-card">
+    <h1>E-commerce Performance</h1>
+    <p>Targets for 2026 plus a comparison snapshot of 2024 vs 2025 actuals.</p>
+    <div class="hero-chips">
+      <span class="hero-chip">Traffic & Conversion</span>
+      <span class="hero-chip">Average Basket</span>
+      <span class="hero-chip">Year-on-Year Growth</span>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link {% if active_tab == 'target' %}active{% endif %}" href="/ecom">2026 Target Plan</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if active_tab == 'comparison' %}active{% endif %}" href="/ecom_comp">2024 vs 2025 Comparison</a>
+    </li>
+  </ul>
+
+  {% if active_tab == 'target' %}
+  <div class="table-card">
+    {% if target_columns and target_rows %}
+    <div class="table-responsive">
+      <table class="e-table">
+        <thead>
+          <tr>
+            {% for c in target_columns %}<th>{{ c }}</th>{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in target_rows %}
+          {% set first = r[target_columns[0]]|lower %}
+          <tr class="{% if 'grand' in first or 'total' in first %}fw-bold{% endif %}">
+            {% for c in target_columns %}
+              {% set val = r[c] %}
+              <td class="{% if val is string and val.replace(',','').replace('.','').isdigit() %}text-end{% endif %}">{{ val }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div>No data found for sheet <strong>2026 Ecom Target</strong>.</div>
+    {% endif %}
+  </div>
+  {% if target_insight %}
+  <div class="alert alert-info mt-3" style="border-radius:14px;">
+    <strong>Insight</strong>
+    <div style="white-space:pre-wrap; margin-top:6px;">{{ target_insight }}</div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+  {% if active_tab == 'comparison' %}
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span>Total 2024</span>
+      <strong>{{ comp_summary.total_2024 }}</strong>
+      <small>Baseline year</small>
+    </div>
+    <div class="stat-card">
+      <span>Total 2025</span>
+      <strong>{{ comp_summary.total_2025 }}</strong>
+      <small>Growth vs 2024</small>
+    </div>
+    <div class="stat-card">
+      <span>Avg 2024</span>
+      <strong>{{ comp_summary.avg_2024 }}</strong>
+      <small>Monthly average</small>
+    </div>
+    <div class="stat-card">
+      <span>Avg 2025</span>
+      <strong>{{ comp_summary.avg_2025 }}</strong>
+      <small>Monthly average</small>
+    </div>
+    <div class="stat-card">
+      <span>Max Month</span>
+      <strong>{{ comp_summary.max_month }}</strong>
+      <small>{{ comp_summary.max_value }}</small>
+    </div>
+    <div class="stat-card">
+      <span>Min Month*</span>
+      <strong>{{ comp_summary.min_month }}</strong>
+      <small>{{ comp_summary.min_value }}</small>
+    </div>
+  </div>
+
+  <div class="table-card">
+    {% if comp_rows %}
+    <div class="table-responsive">
+      <table class="e-table">
+        <thead>
+          <tr>
+            <th>Months</th>
+            <th class="text-end">2024</th>
+            <th class="text-end">2025</th>
+            <th class="text-end">Δ % (2025 vs 2024)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in comp_rows %}
+          {% set pct = row['delta_pct'] if row['delta_pct'] is not none else 0 %}
+          {% set positive = pct >= 0 %}
+          <tr>
+            <td>{{ row['Months'] }}</td>
+            <td class="text-end">{{ row['2024_fmt'] }}</td>
+            <td class="text-end">{{ row['2025_fmt'] }}</td>
+            <td class="text-end">
+              <span class="delta-pill {% if not positive %}bad{% endif %}">
+                {% if positive and row['delta_pct_fmt'] != '—' %}+{% endif %}{{ row['delta_pct_fmt'] }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div>No comparison data found for sheet <strong>ecom 2024 vs 2025</strong>.</div>
+    {% endif %}
+  
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

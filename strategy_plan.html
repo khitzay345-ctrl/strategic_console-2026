@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<style>
+:root {
+  --deep-navy:#050c1a;
+  --plan-card:#0d162b;
+  --muted:#9fb0cc;
+  --accent:#7c4dff;
+}
+.plan-hero {
+  background: radial-gradient(circle at top,#1d2d4f,#050c1a 65%);
+  color:#fff;
+  padding:36px;
+  border-radius:30px;
+  margin-bottom:28px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:center;
+}
+.plan-hero::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=60') center/cover no-repeat;
+  opacity:.18;
+}
+.plan-hero > * { position:relative; z-index:1; }
+.plan-hero h1 { margin:0; font-weight:800; letter-spacing:-.4px; }
+.plan-hero p { margin-top:6px; color:#cdd7ef; font-size:1.18rem; font-weight:600; }
+.download-btn {
+  background:#fff;
+  color:#0b1024;
+  border:none;
+  border-radius:999px;
+  padding:10px 20px;
+  font-weight:700;
+  box-shadow:0 18px 35px rgba(0,0,0,.3);
+}
+.timeline-wrapper { display:grid; gap:26px; }
+.pillar-card {
+  background:var(--plan-card);
+  border-radius:26px;
+  padding:26px;
+  box-shadow:0 30px 65px rgba(5,9,18,.65);
+  border:1px solid rgba(255,255,255,.05);
+}
+.pillar-header { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center; color:#fff; }
+.pillar-header h2 { margin:0; font-weight:700; }
+.phase-chip {
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+  font-size:.85rem;
+  text-transform:uppercase;
+  color:#dde4ff;
+}
+action-grid { margin-top:18px; display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:20px; }
+.actions-grid { margin-top:18px; display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:20px; }
+action-panel {
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:22px;
+  padding:18px;
+  color:#e4ebff;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:relative;
+  overflow:hidden;
+}
+.action-panel {
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:22px;
+  padding:18px;
+  color:#e4ebff;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:relative;
+  overflow:hidden;
+}
+.action-photo {
+  width:100%;
+  aspect-ratio: 4 / 3;
+  border-radius:16px;
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 16px 30px rgba(0,0,0,.35);
+  animation: fadeSlide .6s ease forwards;
+  cursor:pointer;
+}
+@keyframes fadeSlide { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+.meta-row { display:flex; gap:10px; flex-wrap:wrap; font-size:.85rem; color:var(--muted); }
+.meta-row span { background:rgba(255,255,255,.08); border-radius:999px; padding:4px 10px; }
+.action-panel h3 { margin:0; font-size:1.15rem; color:#fff; }
+.action-panel p { margin:0; font-size:.95rem; color:#cbd4ef; line-height:1.4; }
+.fullscreen-modal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s ease;
+}
+.fullscreen-modal.open { opacity:1; pointer-events:auto; }
+.fullscreen-modal img {
+  max-width:90vw;
+  max-height:90vh;
+  border-radius:18px;
+  box-shadow:0 30px 60px rgba(0,0,0,.7);
+}
+.modal-close {
+  position:absolute;
+  top:30px;
+  right:40px;
+  font-size:2rem;
+  color:#fff;
+  cursor:pointer;
+}
+@media(max-width:768px){ .plan-hero { flex-direction:column; align-items:flex-start; padding:24px; } }
+</style>
+
+{% set fallback_img = 'https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?auto=format&fit=crop&w=1200&q=60' %}
+
+<div class="plan-hero">
+  <div>
+    <h1>Goal</h1>
+    <p>{{ goal_text }}</p>
+  </div>
+  {% if not download_mode %}
+  <a class="download-btn" href="/strategy_plan/download" download>
+    <i class="bi bi-download"></i> Download HTML
+  </a>
+  {% endif %}
+</div>
+
+<div class="timeline-wrapper">
+  {% for pillar, entries in pillars.items() %}
+  <section class="pillar-card">
+    <div class="pillar-header">
+      <h2>{{ pillar }}</h2>
+      {% if entries[0].phase %}
+        <span class="phase-chip">Phase {{ entries[0].phase }}</span>
+      {% endif %}
+    </div>
+    <div class="actions-grid">
+      {% for entry in entries %}
+        {% set hero = entry.photos|first %}
+        <article class="action-panel">
+          <div class="action-photo" style="background-image:url('{{ hero if hero else fallback_img }}');" onclick="openFullScreen('{{ hero if hero else fallback_img }}')"></div>
+          <div class="meta-row">
+            <span>Quarter {{ entry.quarter or '-' }}</span>
+            <span>Pillar: {{ pillar }}</span>
+          </div>
+          <h3>{{ entry.action or 'Action TBD' }}</h3>
+          {% if entry.description %}
+          <p>{{ entry.description }}</p>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+  {% if not pillars %}
+    <div class="alert alert-warning">No data found for "2026 Strategy plan" sheet.</div>
+  {% endif %}
+</div>
+
+<div class="fullscreen-modal" id="photoModal" onclick="closeFullScreen(event)">
+  <span class="modal-close">&times;</span>
+  <img src="" alt="Strategy photo" id="modalImg">
+</div>
+
+<script>
+function openFullScreen(url) {
+  const modal = document.getElementById('photoModal');
+  const img = document.getElementById('modalImg');
+  img.src = url;
+  modal.classList.add('open');
+}
+function closeFullScreen(event) {
+  if(event.target.id === 'photoModal' || event.target.classList.contains('modal-close')) {
+    document.getElementById('photoModal').classList.remove('open');
+  }
+}
+</script>
+
+{% endblock %}

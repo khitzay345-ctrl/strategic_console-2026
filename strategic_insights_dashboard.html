@@ -1,0 +1,656 @@
+
+        <!doctype html>
+        <html>
+        <head>
+            <title>Strategic Insights Dashboard</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        </head>
+        <body>
+            <div class="container mt-4">
+                <h1>Strategic Insights Dashboard</h1>
+                <p>Last updated: 2025-12-29 15:17</p>
+                <div class="card mt-4">
+                    <div class="card-header">E-commerce Target</div>
+                    <div class="card-body">
+
+<style>
+.ecom-wrapper { max-width: 1200px; margin: 20px auto 28px; }
+.hero-card {
+  background: radial-gradient(circle at top left,#0b63ff,#04204a 70%);
+  color:#fff;
+  padding:22px 22px 18px;
+  border-radius:22px;
+  box-shadow:0 24px 55px rgba(4,32,74,.4);
+  margin-bottom:18px;
+}
+.hero-card h1 { margin:0; font-weight:800; letter-spacing:-0.05em; }
+.hero-card p { margin-top:6px;opacity:.88; }
+.hero-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem;}
+.hero-chip{padding:0.2rem 0.6rem;border-radius:999px;border:1px solid rgba(191,219,254,0.7);font-size:.72rem;color:#e5e7eb;background:rgba(15,23,42,0.18);}  
+.nav-tabs { border:none; margin-bottom:18px; }
+.nav-tabs .nav-link { border:none; border-radius:999px; padding:10px 20px; font-weight:600; color:#c8d4ff; background:rgba(255,255,255,0.06); }
+.nav-tabs .nav-link.active { background:#23d8bb; color:#041024; box-shadow:0 10px 20px rgba(35,216,187,.35); }
+.table-card { background:rgba(12,21,43,0.92); border-radius:24px; padding:22px; box-shadow:0 25px 55px rgba(4,6,15,.55); border:1px solid rgba(255,255,255,0.08); color:#f8fbff; }
+.e-table { width:100%; border-collapse:separate; border-spacing:0; color:#f4f7ff; }
+.e-table thead th { text-align:left; text-transform:uppercase; font-size:.75rem; letter-spacing:1px; padding:14px 12px; color:#d5ddff; border-bottom:2px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); }
+.e-table tbody td { padding:14px 12px; border-bottom:1px solid rgba(255,255,255,0.08); color:#fefefe; font-weight:500; }
+.e-table tbody tr:last-child td { border-bottom:none; }
+.e-table tbody tr:hover { background:rgba(255,255,255,0.06); }
+.e-table td.text-end { text-align:right; color:#fefefe; font-weight:700; }
+.stat-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap:18px; margin-bottom:20px; }
+.stat-card {
+  background:linear-gradient(135deg,#111b3d,#050811);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 18px 38px rgba(3,5,12,.7);
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  border:1px solid rgba(255,255,255,0.08);
+  color:#eaf1ff;
+}
+.stat-card span { text-transform:uppercase; font-size:.72rem; letter-spacing:.5px; color:#9fb4ff; }
+.stat-card strong { font-size:1.6rem; color:#fff; }
+.stat-card small { font-size:.8rem; color:#b5c2ff; }
+.delta-pill { padding:4px 10px; border-radius:999px; font-size:.75rem; background:rgba(35,216,187,.2); color:#23d8bb; }
+.bad { background:rgba(229,72,72,.2); color:#ffb3b3; }
+</style>
+
+<div class="ecom-wrapper">
+  <div class="hero-card">
+    <h1>E-commerce Performance</h1>
+    <p>Targets for 2026 plus a comparison snapshot of 2024 vs 2025 actuals.</p>
+    <div class="hero-chips">
+      <span class="hero-chip">Traffic & Conversion</span>
+      <span class="hero-chip">Average Basket</span>
+      <span class="hero-chip">Year-on-Year Growth</span>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link {% if active_tab == 'target' %}active{% endif %}" href="/ecom">2026 Target Plan</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if active_tab == 'comparison' %}active{% endif %}" href="/ecom_comp">2024 vs 2025 Comparison</a>
+    </li>
+  </ul>
+
+  {% if active_tab == 'target' %}
+  <div class="table-card">
+    {% if target_columns and target_rows %}
+    <div class="table-responsive">
+      <table class="e-table">
+        <thead>
+          <tr>
+            {% for c in target_columns %}<th>{{ c }}</th>{% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in target_rows %}
+          {% set first = r[target_columns[0]]|lower %}
+          <tr class="{% if 'grand' in first or 'total' in first %}fw-bold{% endif %}">
+            {% for c in target_columns %}
+              {% set val = r[c] %}
+              <td class="{% if val is string and val.replace(',','').replace('.','').isdigit() %}text-end{% endif %}">{{ val }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div>No data found for sheet <strong>2026 Ecom Target</strong>.</div>
+    {% endif %}
+  </div>
+  {% if target_insight %}
+  <div class="alert alert-info mt-3" style="border-radius:14px;">
+    <strong>Insight</strong>
+    <div style="white-space:pre-wrap; margin-top:6px;">{{ target_insight }}</div>
+  </div>
+  {% endif %}
+  {% endif %}
+
+  {% if active_tab == 'comparison' %}
+  <div class="stat-grid">
+    <div class="stat-card">
+      <span>Total 2024</span>
+      <strong>{{ comp_summary.total_2024 }}</strong>
+      <small>Baseline year</small>
+    </div>
+    <div class="stat-card">
+      <span>Total 2025</span>
+      <strong>{{ comp_summary.total_2025 }}</strong>
+      <small>Growth vs 2024</small>
+    </div>
+    <div class="stat-card">
+      <span>Avg 2024</span>
+      <strong>{{ comp_summary.avg_2024 }}</strong>
+      <small>Monthly average</small>
+    </div>
+    <div class="stat-card">
+      <span>Avg 2025</span>
+      <strong>{{ comp_summary.avg_2025 }}</strong>
+      <small>Monthly average</small>
+    </div>
+    <div class="stat-card">
+      <span>Max Month</span>
+      <strong>{{ comp_summary.max_month }}</strong>
+      <small>{{ comp_summary.max_value }}</small>
+    </div>
+    <div class="stat-card">
+      <span>Min Month*</span>
+      <strong>{{ comp_summary.min_month }}</strong>
+      <small>{{ comp_summary.min_value }}</small>
+    </div>
+  </div>
+
+  <div class="table-card">
+    {% if comp_rows %}
+    <div class="table-responsive">
+      <table class="e-table">
+        <thead>
+          <tr>
+            <th>Months</th>
+            <th class="text-end">2024</th>
+            <th class="text-end">2025</th>
+            <th class="text-end">Δ % (2025 vs 2024)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in comp_rows %}
+          {% set pct = row['delta_pct'] if row['delta_pct'] is not none else 0 %}
+          {% set positive = pct >= 0 %}
+          <tr>
+            <td>{{ row['Months'] }}</td>
+            <td class="text-end">{{ row['2024_fmt'] }}</td>
+            <td class="text-end">{{ row['2025_fmt'] }}</td>
+            <td class="text-end">
+              <span class="delta-pill {% if not positive %}bad{% endif %}">
+                {% if positive and row['delta_pct_fmt'] != '—' %}+{% endif %}{{ row['delta_pct_fmt'] }}
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div>No comparison data found for sheet <strong>ecom 2024 vs 2025</strong>.</div>
+    {% endif %}
+  
+  </div>
+  {% endif %}
+</div>
+
+
+</div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header">E-commerce Comparison</div>
+                    <div class="card-body">
+    <div class="dashboard-section">
+      <h2 class="section-title">2024 vs 2025 Comparison</h2>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Months</th>
+              <th class="text-end">2024</th>
+              <th class="text-end">2025</th>
+              <th class="text-end">Δ % (2025 vs 2024)</th>
+            </tr>
+          </thead>
+          <tbody>
+    
+            <tr>
+              <td>Jan</td>
+              <td class="text-end">166,744,270</td>
+              <td class="text-end">185,406,745</td>
+              <td class="text-end">
+                <span class="badge bg-success">
+                  11.2%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Feb</td>
+              <td class="text-end">144,473,560</td>
+              <td class="text-end">122,168,580</td>
+              <td class="text-end">
+                <span class="badge bg-danger">
+                  -15.4%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Mar</td>
+              <td class="text-end">164,241,420</td>
+              <td class="text-end">157,041,185</td>
+              <td class="text-end">
+                <span class="badge bg-danger">
+                  -4.4%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Apr</td>
+              <td class="text-end">130,566,140</td>
+              <td class="text-end">127,513,160</td>
+              <td class="text-end">
+                <span class="badge bg-danger">
+                  -2.3%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>May</td>
+              <td class="text-end">182,037,473</td>
+              <td class="text-end">184,682,834</td>
+              <td class="text-end">
+                <span class="badge bg-success">
+                  1.5%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Jun</td>
+              <td class="text-end">168,795,364</td>
+              <td class="text-end">205,153,368</td>
+              <td class="text-end">
+                <span class="badge bg-success">
+                  21.5%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Jul</td>
+              <td class="text-end">126,163,395</td>
+              <td class="text-end">129,974,850</td>
+              <td class="text-end">
+                <span class="badge bg-success">
+                  3.0%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Aug</td>
+              <td class="text-end">152,599,510</td>
+              <td class="text-end">146,925,690</td>
+              <td class="text-end">
+                <span class="badge bg-danger">
+                  -3.7%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Sep</td>
+              <td class="text-end">139,007,978</td>
+              <td class="text-end">159,588,115</td>
+              <td class="text-end">
+                <span class="badge bg-success">
+                  14.8%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Oct</td>
+              <td class="text-end">148,260,200</td>
+              <td class="text-end">144,650,245</td>
+              <td class="text-end">
+                <span class="badge bg-danger">
+                  -2.4%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Nov</td>
+              <td class="text-end">120,419,012</td>
+              <td class="text-end">116,420,235</td>
+              <td class="text-end">
+                <span class="badge bg-danger">
+                  -3.3%
+                </span>
+              </td>
+            </tr>
+        
+            <tr>
+              <td>Dec</td>
+              <td class="text-end">219,896,926</td>
+              <td class="text-end">—</td>
+              <td class="text-end">
+                <span class="badge bg-danger">
+                  —
+                </span>
+              </td>
+            </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header">Strategy Plan</div>
+                    <div class="card-body">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<style>
+:root {
+  --deep-navy:#050c1a;
+  --plan-card:#0d162b;
+  --muted:#9fb0cc;
+  --accent:#7c4dff;
+}
+.plan-hero {
+  background: radial-gradient(circle at top,#1d2d4f,#050c1a 65%);
+  color:#fff;
+  padding:36px;
+  border-radius:30px;
+  margin-bottom:28px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:center;
+}
+.plan-hero::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=60') center/cover no-repeat;
+  opacity:.18;
+}
+.plan-hero > * { position:relative; z-index:1; }
+.plan-hero h1 { margin:0; font-weight:800; letter-spacing:-.4px; }
+.plan-hero p { margin-top:6px; color:#cdd7ef; font-size:1.18rem; font-weight:600; }
+.download-btn {
+  background:#fff;
+  color:#0b1024;
+  border:none;
+  border-radius:999px;
+  padding:10px 20px;
+  font-weight:700;
+  box-shadow:0 18px 35px rgba(0,0,0,.3);
+}
+.timeline-wrapper { display:grid; gap:26px; }
+.pillar-card {
+  background:var(--plan-card);
+  border-radius:26px;
+  padding:26px;
+  box-shadow:0 30px 65px rgba(5,9,18,.65);
+  border:1px solid rgba(255,255,255,.05);
+}
+.pillar-header { display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center; color:#fff; }
+.pillar-header h2 { margin:0; font-weight:700; }
+.phase-chip {
+  padding:8px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+  font-size:.85rem;
+  text-transform:uppercase;
+  color:#dde4ff;
+}
+action-grid { margin-top:18px; display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:20px; }
+.actions-grid { margin-top:18px; display:grid; grid-template-columns: repeat(auto-fit,minmax(320px,1fr)); gap:20px; }
+action-panel {
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:22px;
+  padding:18px;
+  color:#e4ebff;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:relative;
+  overflow:hidden;
+}
+.action-panel {
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:22px;
+  padding:18px;
+  color:#e4ebff;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  position:relative;
+  overflow:hidden;
+}
+.action-photo {
+  width:100%;
+  aspect-ratio: 4 / 3;
+  border-radius:16px;
+  background-size:cover;
+  background-position:center;
+  box-shadow:0 16px 30px rgba(0,0,0,.35);
+  animation: fadeSlide .6s ease forwards;
+  cursor:pointer;
+}
+@keyframes fadeSlide { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+.meta-row { display:flex; gap:10px; flex-wrap:wrap; font-size:.85rem; color:var(--muted); }
+.meta-row span { background:rgba(255,255,255,.08); border-radius:999px; padding:4px 10px; }
+.action-panel h3 { margin:0; font-size:1.15rem; color:#fff; }
+.action-panel p { margin:0; font-size:.95rem; color:#cbd4ef; line-height:1.4; }
+.fullscreen-modal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s ease;
+}
+.fullscreen-modal.open { opacity:1; pointer-events:auto; }
+.fullscreen-modal img {
+  max-width:90vw;
+  max-height:90vh;
+  border-radius:18px;
+  box-shadow:0 30px 60px rgba(0,0,0,.7);
+}
+.modal-close {
+  position:absolute;
+  top:30px;
+  right:40px;
+  font-size:2rem;
+  color:#fff;
+  cursor:pointer;
+}
+@media(max-width:768px){ .plan-hero { flex-direction:column; align-items:flex-start; padding:24px; } }
+</style>
+
+{% set fallback_img = 'https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?auto=format&fit=crop&w=1200&q=60' %}
+
+<div class="plan-hero">
+  <div>
+    <h1>Goal</h1>
+    <p>{{ goal_text }}</p>
+  </div>
+  {% if False %}
+  <a class="download-btn" href="/strategy_plan/download" download>
+    <i class="bi bi-download"></i> Download HTML
+  </a>
+  
+</div>
+
+<div class="timeline-wrapper">
+  {% for pillar, entries in pillars.items() %}
+  <section class="pillar-card">
+    <div class="pillar-header">
+      <h2>{{ pillar }}</h2>
+      {% if entries[0].phase %}
+        <span class="phase-chip">Phase {{ entries[0].phase }}</span>
+      
+    </div>
+    <div class="actions-grid">
+      {% for entry in entries %}
+        {% set hero = entry.photos|first %}
+        <article class="action-panel">
+          <div class="action-photo" style="background-image:url('{{ hero if hero else fallback_img }}');" onclick="openFullScreen('{{ hero if hero else fallback_img }}')"></div>
+          <div class="meta-row">
+            <span>Quarter {{ entry.quarter or '-' }}</span>
+            <span>Pillar: {{ pillar }}</span>
+          </div>
+          <h3>{{ entry.action or 'Action TBD' }}</h3>
+          {% if entry.description %}
+          <p>{{ entry.description }}</p>
+          
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+  {% if not pillars %}
+    <div class="alert alert-warning">No data found for "2026 Strategy plan" sheet.</div>
+  
+</div>
+
+<div class="fullscreen-modal" id="photoModal" onclick="closeFullScreen(event)">
+  <span class="modal-close">&times;</span>
+  <img src="" alt="Strategy photo" id="modalImg">
+</div>
+
+<script>
+function openFullScreen(url) {
+  const modal = document.getElementById('photoModal');
+  const img = document.getElementById('modalImg');
+  img.src = url;
+  modal.classList.add('open');
+}
+function closeFullScreen(event) {
+  if(event.target.id === 'photoModal' || event.target.classList.contains('modal-close')) {
+    document.getElementById('photoModal').classList.remove('open');
+  }
+}
+</script>
+
+
+</div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header">Roadmap</div>
+                    <div class="card-body">
+
+<style>
+.road-stage {
+  background: #05080f;
+  color: #fff;
+  border-radius: 28px;
+  padding: 30px;
+  box-shadow: 0 30px 60px rgba(0,0,0,.55);
+  overflow: hidden;
+}
+
+.road-bg {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.road-bg img {
+  width: 100%;
+  object-fit: cover;
+  filter: saturate(1.2);
+}
+
+.glass-panel {
+  background: rgba(4, 9, 18, .72);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 24px;
+  margin-top: -60px;
+  position: relative;
+  backdrop-filter: blur(16px);
+}
+
+.quarter-card {
+  background: rgba(255,255,255,.04);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(255,255,255,.07);
+  transition: transform .2s ease;
+}
+
+.quarter-card:hover { transform: translateY(-6px); }
+
+.entry-table { width:100%; border-collapse:collapse; margin-top:12px; table-layout:fixed; }
+.entry-table col.col-activity { width: 20%; }
+.entry-table col.col-topic { width: 55%; }
+.entry-table col.col-owner { width: 25%; }
+.entry-table th, .entry-table td { padding:12px 10px; border-bottom:1px solid rgba(255,255,255,.1); }
+.entry-table th { text-transform:uppercase; font-size:.75rem; letter-spacing:.6px; color:#9ab2d3; }
+.entry-table td { color:#e7efff; }
+.entry-table th:nth-child(3),
+.entry-table td:nth-child(3) { text-align:right; }
+.badge-owner { padding:4px 10px; border-radius:999px; background:rgba(255,255,255,.15); font-size:.8rem; }
+</style>
+
+<div class="road-stage">
+  <div class="road-bg">
+    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1600&q=60" alt="road background">
+  </div>
+  <div class="glass-panel">
+    <h1 style="font-weight:800; margin:0;">Roadmap Journey</h1>
+    <p style="opacity:.7; margin-top:6px;">Every quarter we shift lanes — hover to see owner responsibilities.</p>
+  </div>
+
+  <div class="mt-4">
+    {% for q in quarter_order %}
+    <div class="quarter-card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0; font-weight:700; color:#f4f7ff;">{{ q }}</h3>
+        <span class="badge-owner">{{ quarters[q]|length }} initiatives</span>
+      </div>
+      <div class="table-responsive">
+        <table class="entry-table">
+          <colgroup>
+            <col class="col-activity" />
+            <col class="col-topic" />
+            <col class="col-owner" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Activity ID</th>
+              <th>Topic</th>
+              <th>Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in quarters[q] %}
+            <tr>
+              <td>{{ row.Activity_ID or '-' }}</td>
+              <td>{{ row.Topic or 'Unspecified topic' }}</td>
+              <td>{{ row.Owner or 'TBD' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+</div>
+                </div>
+            </div>
+        </body>
+        </html>
+        
