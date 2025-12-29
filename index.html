@@ -1,155 +1,437 @@
 {% extends "base.html" %}
+
 {% block content %}
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-  .hero-card {
-    background: radial-gradient(circle at top left,#0b63ff,#04204a 70%);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 40px;
-    padding: 48px;
-    box-shadow: 0 24px 55px rgba(4,32,74,.45);
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 32px;
+<div class="container-fluid px-0">
+  <div class="hero-card">
+    <span class="eyebrow">2026 Executive Overview</span>
+    <h1>Strategic Lane Shifting</h1>
+    <p>Unified visibility across our 2026 growth levers. Track E-commerce momentum, execution pillars, and roadmap transitions from a single command surface.</p>
+    <div class="hero-actions d-flex flex-wrap gap-3">
+      <a href="/strategy_plan" class="btn btn-primary d-inline-flex align-items-center gap-2">
+        <i class="bi bi-easel3"></i> View Strategy Plan
+      </a>
+      <a href="/roadmap" class="btn btn-outline-light d-inline-flex align-items-center gap-2">
+        <i class="bi bi-map"></i> Launch Roadmap
+      </a>
+      <a href="/ecom" class="btn btn-outline-light d-inline-flex align-items-center gap-2">
+        <i class="bi bi-graph-up"></i> Analyze E-com Targets
+      </a>
+    </div>
+  </div>
+
+  <style>
+    .hero-card {
+      background: radial-gradient(circle at top left, rgba(93, 107, 255, 0.15), rgba(12, 21, 43, 0.3) 70%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+    
+    @supports not (backdrop-filter: blur(12px)) {
+      .hero-card {
+        background: rgba(12, 21, 43, 0.7);
+      }
+    }
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -5%;
+      top: -10%;
+      width: 50%;
+      height: 120%;
+      background: linear-gradient(45deg, rgba(93, 107, 255, 0.1), rgba(22, 215, 226, 0.1));
+      border-radius: 50%;
+      opacity: 0.6;
+      filter: blur(80px);
+      z-index: 1;
+    }
+    
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      border-radius: 12px;
+      padding: 0.7rem 1.5rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .btn i {
+      font-size: 1.1em;
+    }
+    
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .module-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .module-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+      border-color: rgba(93, 107, 255, 0.3);
+    }
+    
+    .module-card .card-img-top {
+      height: 160px;
+      object-fit: cover;
+      filter: grayscale(0.2) brightness(0.9);
+      transition: all 0.3s ease;
+    }
+    
+    .module-card:hover .card-img-top {
+      filter: grayscale(0) brightness(1);
+    }
+    
+    .module-card .card-body {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .module-card .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+    
+    .module-card .card-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+    
+    .badge {
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.35em 0.8em;
+      border-radius: 50px;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+    }
+    
+    .badge-growth {
+      background: rgba(29, 209, 172, 0.15);
+      color: var(--success);
+    }
+    
+    .badge-execution {
+      background: rgba(169, 112, 255, 0.15);
+      color: var(--purple);
+    }
+    
+    .badge-timeline {
+      background: rgba(74, 141, 255, 0.15);
+      color: var(--info);
+    }
+
+  .snapshot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
   }
-  .hero-card::after {
-    content: "";
-    position: absolute;
-    right: -10%;
-    top: -10%;
-    width: 60%;
-    height: 140%;
-    background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=60') center/cover;
-    opacity: .25;
-    transform: rotate(12deg);
+  
+  .snapshot-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
   }
-  .hero-card > * { position: relative; z-index: 2; }
-  .hero-chip { display:inline-flex; align-items:center; gap:6px; padding:6px 16px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.08); font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; }
-  .hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
-  .btn-primary-hero { background:#fff; color:#041024; border-radius:20px; padding:12px 24px; font-weight:700; }
-  .btn-glass { background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.25); color:#fff; border-radius:20px; padding:12px 24px; font-weight:600; }
-
-  .sections-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:22px; margin-bottom:32px; }
-  .module-card { border-radius:26px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(12,21,43,.7); backdrop-filter: blur(16px); transition:transform .3s ease,border-color .3s ease; display:block; color:inherit; }
-  .module-card:hover { transform: translateY(-6px); border-color:rgba(93,107,255,.4); }
-  .module-card img { width:100%; height:190px; object-fit:cover; filter:grayscale(0.3); transition:filter .4s ease, transform .4s ease; }
-  .module-card:hover img { filter:grayscale(0); transform:scale(1.02); }
-  .module-card .badge { position:absolute; bottom:16px; left:16px; background:#1dd1ac; padding:4px 12px; border-radius:999px; font-size:.65rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; }
-  .module-card .body { padding:20px 24px 28px; }
-
-  .snapshot-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:18px; margin-bottom:32px; }
-  .snapshot-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:22px; padding:20px; box-shadow:0 25px 45px rgba(0,0,0,.4); }
-  .snapshot-card table { width:100%; border-collapse:collapse; font-size:.9rem; }
-  .snapshot-card td { padding:6px 0; color:#e9f0ff; }
-  .snapshot-card td.text-end { font-weight:600; color:#f7fbff; }
-
-  .timeline { display:grid; gap:14px; }
-  .timeline-item { background:rgba(255,255,255,0.04); border-radius:18px; padding:16px; border:1px solid rgba(255,255,255,0.08); color:#e2e8ff; }
-  .timeline-item strong { display:block; font-size:1rem; margin-bottom:6px; color:#fff; }
+  
+  .snapshot-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    border-color: rgba(93, 107, 255, 0.2);
+  }
+  
+  .snapshot-card .card-header {
+    background: transparent;
+    border: none;
+    padding: 0 0 1rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .snapshot-card .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .snapshot-card .card-title .badge {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.6rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .snapshot-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  .snapshot-card tr:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .snapshot-card td {
+    padding: 0.6rem 0;
+    color: var(--text-muted);
+  }
+  
+  .snapshot-card td:last-child {
+    text-align: right;
+    font-weight: 600;
+    color: #fff;
+  }
+  
+  .timeline {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .timeline-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+  }
+  
+  .timeline-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+  }
+  
+  .timeline-item strong {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+  }
+  
+  .timeline-item .text-muted {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
   @media(max-width:768px){
     .hero-card { padding:32px; }
     .hero-actions { flex-direction:column; }
   }
+
+  @media (max-width: 1200px) {
+    .sections-grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .sections-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-card {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      margin-left: -1rem;
+      margin-right: -1rem;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+    }
+    
+    .hero-actions {
+      justify-content: center;
+    }
+    
+    .module-card .card-img-top {
+      height: 200px;
+    }
+    
+    .timeline-item {
+      padding: 1.25rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .hero-card {
+      padding: 1.5rem 1.25rem;
+    }
+    
+    .hero-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .timeline-item {
+      padding: 1rem;
+    }
+  }
 </style>
 
-<div class="hero-card">
-  <span class="hero-chip"><span class="live-dot"></span> 2026 Executive Overview</span>
-  <h1 style="font-size:clamp(2.2rem,3vw,3.8rem);font-weight:800;margin:18px 0 12px;">Strategic Lane Shifting</h1>
-  <p style="max-width:600px;color:rgba(255,255,255,0.85);font-size:1.1rem;line-height:1.6;">
-    Unified visibility across our 2026 growth levers. Track E-commerce momentum, execution pillars, and roadmap transitions from a single command surface.
-  </p>
-  <div class="hero-actions">
-    <a href="/strategy_plan" class="btn-primary-hero">View Strategy Plan <i class="bi bi-chevron-right"></i></a>
-    <a href="/roadmap" class="btn-glass">Launch Roadmap</a>
-    <a href="/ecom" class="btn-glass">Analyze E-com Targets</a>
-  </div>
-</div>
 
-<div class="sections-grid">
-  <a href="/ecom" class="module-card"> 
-    <div style="position:relative;">
-      <img src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=900&q=80" alt="E-commerce">
-      <span class="badge" style="background:#1dd1ac;">Growth</span>
-    </div>
-    <div class="body">
-      <h3 class="h5 fw-bold">E-commerce</h3>
-      <p class="text-muted" style="color:#cfe2ff; font-size:.9rem;">Live targets with comparison of 2024 vs 2025 revenue momentum.</p>
-    </div>
-  </a>
-  <a href="/strategy_plan" class="module-card">
-    <div style="position:relative;">
-      <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80" alt="Strategy Plan">
-      <span class="badge" style="background:#a970ff;">Execution</span>
-    </div>
-    <div class="body">
-      <h3 class="h5 fw-bold">Strategy Pillars</h3>
-      <p style="color:#dacfff; font-size:.9rem;">Quarterly action cards with media-rich storytelling.</p>
-    </div>
-  </a>
-  <a href="/roadmap" class="module-card">
-    <div style="position:relative;">
-      <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80" alt="Roadmap">
-      <span class="badge" style="background:#4a8dff;">Timeline</span>
-    </div>
-    <div class="body">
-      <h3 class="h5 fw-bold">Roadmap Journey</h3>
-      <p style="color:#c9dbff; font-size:.9rem;">Initiative density by quarter with owner visibility.</p>
-    </div>
-  </a>
-</div>
-
-<h3 class="section-title">Performance Snapshots</h3>
-<div class="snapshot-grid">
-  {% for card in cards %}
-  <div class="snapshot-card">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <h4 class="h6 fw-bold mb-0">{{ card.title }}</h4>
-      <div class="d-flex gap-2">
-        <a href="{{ card.link }}" class="text-decoration-none text-info">View</a>
-        <a href="{{ card.download }}" download class="text-decoration-none text-muted">Download</a>
+  <div class="sections-grid">
+    <div class="card module-card">
+      <img src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=900&q=80" class="card-img-top" alt="E-commerce">
+      <div class="card-body">
+        <span class="badge badge-growth mb-2">Growth</span>
+        <h3 class="card-title">E-commerce</h3>
+        <p class="card-text">Live targets with comparison of 2024 vs 2025 revenue momentum and growth trajectories.</p>
+        <a href="/ecom" class="btn btn-sm btn-outline-light align-self-start mt-auto">
+          View Dashboard <i class="bi bi-arrow-right"></i>
+        </a>
       </div>
     </div>
-    {% if card.rows %}
-    <table>
-      {% for row in card.rows %}
-      <tr>
-        <td>{{ row.label }}</td>
-        <td class="text-end">{{ row.value }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% else %}
-    <div class="text-muted">No data available.</div>
-    {% endif %}
-  </div>
-  {% endfor %}
-</div>
-
-<div class="row g-4">
-  <div class="col-lg-6">
-    <h3 class="section-title">Strategy Plan Highlights</h3>
-    <div class="timeline">
-      {% set pillars = strategy.pillars.items()|list %}
-      {% for pillar, entries in pillars[:3] %}
-      <div class="timeline-item">
-        <strong>{{ pillar }}</strong>
-        <div>{{ entries[0].action or 'Action TBD' }}</div>
-        <div class="text-muted" style="font-size:.85rem;">Quarter {{ entries[0].quarter or '-' }}</div>
+    
+    <div class="card module-card">
+      <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80" class="card-img-top" alt="Strategy Plan">
+      <div class="card-body">
+        <span class="badge badge-execution mb-2">Execution</span>
+        <h3 class="card-title">Strategy Pillars</h3>
+        <p class="card-text">Quarterly action cards with media-rich storytelling and progress tracking.</p>
+        <a href="/strategy_plan" class="btn btn-sm btn-outline-light align-self-start mt-auto">
+          View Plan <i class="bi bi-arrow-right"></i>
+        </a>
       </div>
-      {% endfor %}
+    </div>
+    
+    <div class="card module-card">
+      <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80" class="card-img-top" alt="Roadmap">
+      <div class="card-body">
+        <span class="badge badge-timeline mb-2">Timeline</span>
+        <h3 class="card-title">Roadmap Journey</h3>
+        <p class="card-text">Initiative density by quarter with owner visibility and dependency mapping.</p>
+        <a href="/roadmap" class="btn btn-sm btn-outline-light align-self-start mt-auto">
+          Explore Roadmap <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
     </div>
   </div>
-  <div class="col-lg-6">
-    <h3 class="section-title">Roadmap Snapshot</h3>
-    <div class="timeline">
-      {% for quarter in roadmap.quarter_order[:3] %}
-      <div class="timeline-item">
-        <strong>{{ quarter }}</strong>
-        <div>{{ roadmap.quarters[quarter]|length }} initiatives</div>
-        <div class="text-muted" style="font-size:.85rem;">Key topic: {{ roadmap.quarters[quarter][0].Topic or 'TBD' }}</div>
+
+  <h3 class="section-title">Performance Snapshots</h3>
+  <div class="snapshot-grid">
+    {% for card in cards %}
+    <div class="snapshot-card">
+      <div class="card-header">
+        <h4 class="card-title">
+          {{ card.title }}
+          <span class="badge">{{ card.rows|length }} metrics</span>
+        </h4>
       </div>
-      {% endfor %}
+      <div class="card-body">
+        {% if card.rows %}
+        <table>
+          <tbody>
+            {% for row in card.rows %}
+            <tr>
+              <td>{{ row.label }}</td>
+              <td>{{ row.value }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="text-center py-4 text-muted">
+          <i class="bi bi-inbox" style="font-size: 2rem; opacity: 0.5;"></i>
+          <p class="mt-2 mb-0">No data available</p>
+        </div>
+        {% endif %}
+      </div>
+      <div class="card-footer bg-transparent border-top-0 pt-0 text-end">
+        <div class="btn-group btn-group-sm">
+          <a href="{{ card.link }}" class="btn btn-sm btn-link text-primary">
+            <i class="bi bi-eye"></i> View
+          </a>
+          <a href="{{ card.download }}" download class="btn btn-sm btn-link text-muted">
+            <i class="bi bi-download"></i> Export
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-title mb-0">Strategy Plan Highlights</h3>
+        <a href="/strategy_plan" class="btn btn-sm btn-outline-light">
+          View All <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+      <div class="timeline">
+        {% set pillars = strategy.pillars.items()|list %}
+        {% for pillar, entries in pillars[:3] %}
+        <a href="/strategy_plan#{{ pillar|lower|replace(' ', '-') }}" class="timeline-item">
+          <strong>{{ pillar }}</strong>
+          <div class="text-truncate">{{ entries[0].action or 'Action TBD' }}</div>
+          <div class="text-muted">
+            <i class="bi bi-calendar3"></i> Q{{ entries[0].quarter or 'N/A' }} {{ entries[0].year or '' }}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    
+    <div class="col-lg-6">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-title mb-0">Roadmap Snapshot</h3>
+        <a href="/roadmap" class="btn btn-sm btn-outline-light">
+          View Full Roadmap <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+      <div class="timeline">
+        {% for quarter in roadmap.quarter_order[:3] %}
+        <a href="/roadmap#{{ quarter|lower|replace('q', 'q-') }}" class="timeline-item">
+          <strong>{{ quarter }}</strong>
+          <div>{{ roadmap.quarters[quarter]|length }} {% if roadmap.quarters[quarter]|length == 1 %}initiative{% else %}initiatives{% endif %}</div>
+          <div class="text-muted">
+            <i class="bi bi-tag"></i> {{ roadmap.quarters[quarter][0].Topic or 'TBD' }}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
